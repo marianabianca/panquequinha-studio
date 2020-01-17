@@ -10,4 +10,4 @@ pip install -r requirements.txt
 ```
 
 # Running 
-Currently we have an draf CLI that you can access executing `app.py`, but all the funcionalities are inside [this file](functions.py)
+Currently we have an draf CLI that you can access executing [app.py](app.py), but all the funcionalities are inside [this file](functions.py)
