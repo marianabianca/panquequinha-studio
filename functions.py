@@ -8,34 +8,29 @@ from blend_modes import overlay as ovl
 
 # Applies grain effect to image
 def grain_img(img, percentage):
-	img_aux = img
-	img_arr = np.array(img_aux)
-	for i in range(len(img_arr)):
-		grain_line(img_arr[i], percentage)
-	return img_aux
+	img_arr = np.array(img)
+	grain(img_arr, pixel_sample(img.size, percentage))
+	return Image.fromarray(img_arr)
 
 
-# Applies grains on one line of image matrix
-def grain_line(arr, percentage):
-	pixels = random_pixels(len(arr), percentage)
-	for p in range (len(arr)):
-		if p in pixels:
-			bright_pixel(arr[p], 10, 40)
+# Applies grains on specified pixels image matrix
+def grain(arr, pixels, min_br=10, max_br=40):
+	for x, y in pixels:
+		arr[x, y] = bright_pixel(arr[x, y], min_br, max_br)
 
 
 # Determines the pixels that will be brighter
-def random_pixels(size, percentage):
-	pixels = []
-	for i in range(int(size*percentage)):
-		pixels.append(random.randint(0, size-1))
-	return pixels
+def pixel_sample(size, percentage):
+	for i in range(size[0]):
+		for j in range(size[1]):
+			if random.random() < percentage:
+				yield (i, j)
 
 
 # Makes a pixels brighter in a random way
-def bright_pixel(arr, min_br, max_br):
+def bright_pixel(pixel, min_br, max_br):
 	br = random.randint(min_br, max_br)
-	for i in range(len(arr)):
-		arr[i] = min(arr[i] + br, 255)
+	return tuple(min(255, ch + br) for ch in pixel)
 
 
 # Resizes image
